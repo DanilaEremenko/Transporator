@@ -10,6 +10,8 @@ public class TransporatorClass {
 
 
     public static void main(String[] args) {
+
+
         //Scanner scan = new Scanner(System.in);
         //String s = scan.nextLine();
         try {
@@ -18,19 +20,15 @@ public class TransporatorClass {
                     new BufferedReader(new InputStreamReader(System.in,"Cp866"));
             PrintWriter pw=new PrintWriter(
                     new OutputStreamWriter(System.out,"Cp866"),true);
-            String s="Это строка с русским текстом";
-            System.out.println("System.out puts:"+s);
             int c=0;
-
-            pw.println("Посимвольный ввод");
             while((c=br.read())!=-1)
                 pw.println((char)c);
-            pw.println("Построчный ввод:");
-            do{
-                s=br.readLine();
-                pw.println(s);
-
-            }while(!s.equals("q"));
+//
+//            do{
+//                s=br.readLine();
+//                pw.println(s);
+//
+//            }while(!s.equals("q"));
 
 
         }catch (Exception e){
