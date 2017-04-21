@@ -3,23 +3,28 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class NumberText extends JFrame {
-    JTextField tf = new JTextField(10);
     JLabel l = new JLabel("Введите цифры:");
+    JTextField tf = new JTextField(10);
+    //Подпись над полем ввода
+    JLabel podpis=new JLabel("Введите цифры:");
+    //Поле ввода
+    JTextField tablo=new JTextField(10);
 
     NumberText() {
         super("text");
         setLayout(new FlowLayout());
         // Вставляем фильтр вводимых символов
-        ((PlainDocument) tf.getDocument()).setDocumentFilter(new NumberFilter());
-        // Текст будет выделяться только красным цветом
-        tf.setSelectedTextColor(Color.red);
-        // При выделении текста фона станет черным
-        tf.setSelectionColor(Color.black);
-        // Курсор будет белым
-        tf.setCaretColor(Color.white);
-        l.setLabelFor(tf);
-        add(l);
-        add(tf);
+        //((PlainDocument) tf.getDocument()).setDocumentFilter(new NumberFilter());
+        // Тут задаем цвет текста при выделении текста
+        tablo.setSelectedTextColor(Color.red);
+        // Тут задаем цвет фона при выделении текста
+        tablo.setSelectionColor(Color.black);
+        // Тут задаем цвет курсора
+        tablo.setCaretColor(Color.white);
+        //В чем смысл этой фигни
+        //l.setLabelFor(tf);
+        add(podpis);
+        add(tablo);
         setSize(400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
