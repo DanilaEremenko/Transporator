@@ -21,7 +21,7 @@ public class TransporatorClass {
             PrintWriter pw=new PrintWriter(
                     new OutputStreamWriter(System.out,"Cp866"),true);
             int c=0;
-            while((c=br.read())!=-1)
+            //while((c=br.read())!=-1)
                 pw.println((char)c);
 //
 //            do{
