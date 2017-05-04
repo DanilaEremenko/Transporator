@@ -11,30 +11,36 @@ public class FREE {
         BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\danil\\Desktop\\endedfile.txt")); //выходной файл
         Scanner sc = new Scanner(System.in);
         String s;
+        int j = 0;
         StringBuffer sb = new StringBuffer();//буфер для входного текста
         StringBuffer rez = new StringBuffer();//буфер для обработанного текста
-
+        StringBuffer[][] massString = new StringBuffer[3][3];
         while (true) {//цикл для вычитывания файла
-            String buffer = reader.readLine();
-            if (buffer == null) {
-                break;
-            }
-            sb.append(buffer + "\n");//заполняем буфер вычитанным текстом
-        }
-
-        for (; ; ) {//начало обработки
-            s = sc.nextLine();
-            if (s.length() == 0)
+            String str = reader.readLine();
+            if (str == null)
                 break;
 
-            rez.append(s+"\n");
+
+            sb.append(str + "\n");//заполняем буфер вычитанным текстом
+
+            writer.write(sb.toString());
+            System.out.println(sb.toString());
 
 
+//        for (; ; ) {//начало обработки
+//            s = sc.nextLine();
+//            if (s.length() == 0)
+//                break;
+//
+//            rez.append(s+"\n");
+//
+//
+//        }
+//        writer.write(rez.toString());//пишем в файл обработанный текст
+            System.out.println(rez.toString());
+            writer.flush();//закрываем потоки i/o, лучше бы все это запихнуть в try/finally
+            writer.close();
+            reader.close();
         }
-        writer.write(rez.toString());//пишем в файл обработанный текст
-        System.out.println(rez.toString());
-        writer.flush();//закрываем потоки i/o, лучше бы все это запихнуть в try/finally
-        writer.close();
-        reader.close();
     }
 }
