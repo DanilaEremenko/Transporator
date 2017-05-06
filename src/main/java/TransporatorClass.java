@@ -6,14 +6,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TransporatorClass {
-
     private int strings = 0;  //Колличество строк
     private int columns = 0;  //Максимальне колличество слов в строке
-    private StringBuilder sb; //Для хранения исходного текста
-    private StringBuilder tsb;//Для хранения транспонированного текста
-    private String[][] tmassWord;//Массив для хранения транспоинрованной матрицы слов
-    private String[][] massWord;  //Массив для хранения слов
-    private ArrayList<String> wordList;
+    private StringBuilder[][] massWord;  //Массив для хранения слов
+
 
     TransporatorClass(String file) {
         StringBuilder sb = new StringBuilder();
@@ -27,16 +23,12 @@ public class TransporatorClass {
 
             System.out.println(ex.getMessage());
         }
-        this.sb = sb;
 
 
         String[] massStr;
         String str = sb.toString();
         massStr = str.split("\n");//разбили поток на строчки
         this.strings = massStr.length;
-
-        for (int i = 0; i < massStr.length; i++)
-            System.out.println("massStr[" + i + "]=" + massStr[i]);
 
         for (int i = 0; i < massStr.length; i++) {
             if (columns < massStr[i].split(" ").length)
@@ -46,7 +38,7 @@ public class TransporatorClass {
         System.out.println("Максимальное колличество столбцов = " + columns);
         System.out.println("Колличество строчек = " + strings);
         String stringsStr[];
-        massWord = new String[strings][columns];
+        massWord = new StringBuilder[strings][columns];
         stringsStr = massStr[0].split(" ");
         for (int i = 0; i < strings; i++) {
             for (int j = 0; j < columns; j++) {
@@ -54,11 +46,11 @@ public class TransporatorClass {
 
                 if (j >= stringsStr.length) {
                     while (j < columns) {
-                        massWord[i][j] = "-";
+                        massWord[i][j] = new StringBuilder("~");
                         j++;
                     }
                 } else
-                    massWord[i][j] = stringsStr[j];
+                    massWord[i][j] = new StringBuilder(stringsStr[j]);
 
             }
             if (i != strings - 1)
@@ -66,59 +58,89 @@ public class TransporatorClass {
         }
 
 
-        System.out.println("\nВходной файл");
     }
 
+    //Обрезает все слова в тексте до заданного размера
+    void cut(int number) {
+        for (int i = 0; i < strings; i++)
+            for (int j = 0; j < columns; j++) {
+                if (massWord[i][j].toString() != "~") {
+                    if (massWord[i][j].length() > number)
+                        massWord[i][j].delete(number, massWord[i][j].length());
 
-    void clear() {
-        sb.delete(0, sb.length());
+                }
+            }
+
     }
 
+    //Записывает текст в документ
     void writeTo(String ofile) throws IOException {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
-        writer.write(sb.toString());
+        for (int i = 0; i < strings; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (massWord[i][j].toString() == "~") {
+
+                } else {
+                    writer.write(massWord[i][j].toString());
+                    writer.write(" ");
+
+                }
+            }
+
+            writer.write("\r\n");
+        }
         writer.flush();//закрываем потоки i/o, лучше бы все это запихнуть в try/finally
         writer.close();
 
 
     }
 
-    String getString() {
-        return sb.toString();
+    //Выводит текст документа на консоль по адресу
+    void getTextofFile(String file) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            int c;
+            while ((c = br.read()) != -1) {
+                System.out.print((char) c);
+            }
+            br.close();
+        } catch (IOException ex) {
+
+            System.out.println(ex.getMessage());
+        }
+
+        System.out.println();
     }
 
-
+    //Транспонирует текст
     void transpose() {
-        tsb = new StringBuilder();
-        tmassWord = new String[columns][strings];
+        StringBuilder[][] tmassWord = new StringBuilder[columns][strings];
         for (int i = 0; i < columns; i++) {
-
             for (int j = 0; j < strings; j++) {
 
                 tmassWord[i][j] = massWord[j][i];
 
-                if (tmassWord[i][j] != "-")
-                    tsb.append(" " + tmassWord[i][j]);
             }
-
-            tsb.append("\r\n");
         }
-        sb = tsb;
+        int c = columns;
+        columns = strings;
+        strings = c;
+        massWord = new StringBuilder[strings][columns];
+        massWord = tmassWord;
 
-    }
-
-    void getMatrix() {
     }
 
 
     public static void main(String[] args) throws IOException {
         TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
-        System.out.println(tr.getString());
-        System.out.println("Полученная матрица");
+        System.out.println("Входной файл");
+        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
+        tr.cut(1);
         tr.transpose();
-        tr.getMatrix();
+        tr.transpose();
         tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
+        System.out.println("Полученный файл");
+        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
 
     }
 
