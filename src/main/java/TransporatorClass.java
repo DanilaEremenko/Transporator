@@ -26,51 +26,8 @@ public class TransporatorClass {
         }
 
 
-        String[] massStr;
-        String str = sb.toString();
-        massStr = str.split("\n");//разбили поток на строчки
-
-        this.massStr = new StringBuilder[massStr.length];
-        for (int i = 0; i < massStr.length; i++)
-            this.massStr[i] = new StringBuilder(massStr[i]);
 
 
-        this.strings = massStr.length;
-
-        for (int i = 0; i < massStr.length; i++) {
-            if (columns < massStr[i].split(" ").length)
-                columns = massStr[i].split(" ").length;
-        }
-        String stringsStr[];
-        massWord = new StringBuilder[strings][columns];
-        stringsStr = massStr[0].split(" ");
-        for (int i = 0; i < strings; i++) {
-            for (int j = 0; j < columns; j++) {
-
-
-                if (j >= stringsStr.length) {
-                    while (j < columns) {
-                        massWord[i][j] = new StringBuilder("~");
-                        j++;
-                    }
-                } else
-                    massWord[i][j] = new StringBuilder(stringsStr[j]);
-
-            }
-            if (i != strings - 1)
-                stringsStr = massStr[i + 1].split(" ");
-        }
-
-
-        for (int i = 0; i < strings; i++) {
-            for (int j = 0; j < columns; j++) {
-                if (j == 0) {
-                    System.out.print(massWord[i][j]);
-                } else
-                    System.out.print(" " + massWord[i][j]);
-            }
-            System.out.println("\r\n");
-        }
 
 
     }
@@ -99,12 +56,12 @@ public class TransporatorClass {
         this.strings = massStr.length;
 
         for (int i = 0; i < massStr.length; i++) {
-            if (columns < massStr[i].split(" ").length)
-                columns = massStr[i].split(" ").length;
+            if (columns < massStr[i].split("\\s+").length)
+                columns = massStr[i].split("\\s+").length;
         }
         String stringsStr[];
         massWord = new StringBuilder[strings][columns];
-        stringsStr = massStr[0].split(" ");
+        stringsStr = massStr[0].split("\\s+");
         for (int i = 0; i < strings; i++) {
             for (int j = 0; j < columns; j++) {
 
@@ -119,9 +76,13 @@ public class TransporatorClass {
 
             }
             if (i != strings - 1)
-                stringsStr = massStr[i + 1].split(" ");
+                stringsStr = massStr[i + 1].split("\\s+");
         }
 
+
+    }
+
+    private void constructor(){
 
     }
 
@@ -179,7 +140,7 @@ public class TransporatorClass {
     }
 
     //Выравнивает текст по правому краю
-    public void right() {
+    public void right()  {
         int maxsize = 0;
         for (int i = 0; i < strings; i++) {
             for (int j = 0; j < massStr[i].length(); j++) {
@@ -193,7 +154,7 @@ public class TransporatorClass {
         }
 
         for (int i = 0; i < strings; i++) {
-            while (massStr[i].length() < maxsize + 1) {
+            while (massStr[i].length() < maxsize) {
                 massStr[i].reverse().append(" ").reverse();
             }
         }
@@ -244,26 +205,27 @@ public class TransporatorClass {
     public static void main(String[] args) throws IOException {
 
         //ТЕКСТ БЕРЕТСЯ ИЗ ДОКУМЕНТА
-        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
-        System.out.println("Входной файл");
-        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
-        tr.cut(1);
-        tr.transpose();
-        tr.right();
-        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
-        System.out.println("Полученный текстовый файл ");
-        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
+//        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
+//        System.out.println("Входной файл");
+//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
+//        tr.cut(1);
+//        tr.transpose();
+//        tr.right();
+//        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
+//        System.out.println("Полученный текстовый файл ");
+//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
 
 
-        //ТЕКСТ ВВОДИТСЯ С КЛАВИАТУРЫ
+         //   ТЕКСТ ВВОДИТСЯ С КЛАВИАТУРЫ
 
-//        System.out.println("Исходная матрица");
-//        TransporatorClass tr2 = new TransporatorClass();
-//        tr2.cut(1);
-//        tr2.right();
-//        //tr2.transpose();
-//        System.out.println("Полученная матрица ");
-//        tr2.getMatrix();
+        System.out.println("Исходная матрица");
+        TransporatorClass tr2 = new TransporatorClass();
+        tr2.cut(1);
+        tr2.right();
+        tr2.transpose();
+        tr2.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
+        System.out.println("Полученная матрица ");
+        tr2.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
 
     }
 

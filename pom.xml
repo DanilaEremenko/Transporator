@@ -7,6 +7,13 @@
     <groupId>Erema</groupId>
     <artifactId>SpbStu</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
+            <version>2.33</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
