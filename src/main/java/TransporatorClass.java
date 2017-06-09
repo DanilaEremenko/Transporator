@@ -4,12 +4,20 @@ import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Scanner;
+/*(+)Конструкторы
+*(+)transpose
+*(+)cut
+*(+)Запись в новый текстовый файл
+*(-)Выравнивание по правому краю
+*/
+
 
 public class TransporatorClass {
-    private int strings = 0;  //Колличество строк
+    private int stringslength[];  //Длины всех строк
     private int columns = 0;  //Максимальне колличество слов в строке
-    private StringBuilder[][] massWord;  //Массив для хранения слов
     private StringBuilder[] massStr;//Массив хранящий текст разбитый построчно
+    private ArrayList<String> wordArray = new ArrayList<String>();// Список для хранения текста
+    private ArrayList<String>[] line;//Список для хранения текста в строках
 
     TransporatorClass(String file) {
         StringBuilder sb = new StringBuilder();
@@ -24,11 +32,7 @@ public class TransporatorClass {
 
             System.out.println(ex.getMessage());
         }
-
-
-
-
-
+        makeArrayWord(sb);
 
     }
 
@@ -44,128 +48,119 @@ public class TransporatorClass {
             } else
                 sb.append(s + "\r\n");
         }
-
-        String[] massStr;
-        String str = sb.toString();
-        massStr = str.split("\n");//разбили поток на строчки
-
-        this.massStr = new StringBuilder[massStr.length];
-        for (int i = 0; i < massStr.length; i++)
-            this.massStr[i] = new StringBuilder(massStr[i]);
-
-        this.strings = massStr.length;
-
-        for (int i = 0; i < massStr.length; i++) {
-            if (columns < massStr[i].split("\\s+").length)
-                columns = massStr[i].split("\\s+").length;
-        }
-        String stringsStr[];
-        massWord = new StringBuilder[strings][columns];
-        stringsStr = massStr[0].split("\\s+");
-        for (int i = 0; i < strings; i++) {
-            for (int j = 0; j < columns; j++) {
-
-
-                if (j >= stringsStr.length) {
-                    while (j < columns) {
-                        massWord[i][j] = new StringBuilder("~");
-                        j++;
-                    }
-                } else
-                    massWord[i][j] = new StringBuilder(stringsStr[j]);
-
-            }
-            if (i != strings - 1)
-                stringsStr = massStr[i + 1].split("\\s+");
-        }
-
+        makeArrayWord(sb);
 
     }
 
-    private void constructor(){
+    private void makeArrayWord(StringBuilder sb) {
+        //Пока что на выходе имеем полный список и список рахбитый на строчки, от одного потом надо будет избавиться
+        String massString[];//Промежуточный массив для сплита, можно избавиться
+        String s = sb.toString();//Переводим в строку чтобы можно было сплитить(может быть можно сплитить сразу)
+        massString = s.split("\n");//Разбиваем на строчки
+        stringslength = new int[massString.length];//Длина каждой строчки, возможно надо будет убрать
 
+        String massWord[] = new String[massString.length];//Кажется тоже промежуточный массив,попробуй убрать
+
+        line = new ArrayList[massString.length];//Здесь кажется должно быть <String> но компилятор жалуется
+        //Запускаем цикл для каждоый строчки
+        for (int i = 0; i < massString.length; i++) {
+            line[i] = new ArrayList<String>();
+            massWord = massString[i].split("\\s+");
+            stringslength[i] = massWord.length;
+            for (int j = 0; j < massWord.length; j++) {
+                line[i].add(massWord[j]);
+                wordArray.add(massWord[j]);
+            }
+            wordArray.add("\r\n");//В строчку наверное добавлять не надо
+        }
     }
 
     //Транспонирует текст
     public void transpose() {
-        StringBuilder[][] tmassWord = new StringBuilder[columns][strings];
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < strings; j++) {
-
-                tmassWord[i][j] = massWord[j][i];
+//        ArrayList<String> trAr = new ArrayList<String>();
+//        int numberproh = 0;
+//        int j = 0;
+//        for (int i = 0; ; i++) {
+//            if (trAr.size() == wordArray.size())
+//                break;
+//            if (wordArray.get(i) == "\r\n") {
+//                trAr.add(wordArray.get(i - stringslength[j] + numberproh));
+//                j++;
+//            }
+//            if (i == wordArray.size() - 1) {
+//                i = 0;
+//                j = 0;
+//                trAr.add("\r\n");
+//                numberproh++;
+//            }
+//
+//        }
+//        wordArray = trAr;
+        //Выше старая реализация, сейчас пробуем через строчки
+        //Ниже получаем транспонированную матрицу разбитую на строчки
+        ArrayList[] temporaryline = new ArrayList[line.length];
+        for (int i = 0; i < line.length; i++) {
+            temporaryline[i] = new ArrayList<String>();
+            for (int j = 0; j < line.length; j++) {
+                if (i < line[j].size())
+                    temporaryline[i].add(line[j].get(i));
 
             }
-        }
-        int c = columns;
-        columns = strings;
-        strings = c;
-        massWord = new StringBuilder[strings][columns];
-        massWord = tmassWord;
-        massStr = new StringBuilder[strings];
-        for (int i = 0; i < strings; i++) {
-            massStr[i] = new StringBuilder();
-            for (int j = 0; j < columns; j++) {
-                if (j != 0)
-                    massStr[i].append(" " + massWord[i][j]);
-                else
-                    massStr[i].append(massWord[i][j]);
-            }
-            massStr[i].append("\r\n");
-        }
-        delWaste();
 
+        }
+
+        line = temporaryline;
     }
+    //Если реализация сработает убрать ненужный массив из слов
+
 
     //Обрезает все слова в тексте до заданного размера
     public void cut(int number) {
-        for (int i = 0; i < strings; i++) {
-            massStr[i] = new StringBuilder();
-            for (int j = 0; j < columns; j++) {
-                if (massWord[i][j].toString() != "~") {
-                    if (massWord[i][j].length() > number)
-                        massWord[i][j].delete(number, massWord[i][j].length());
-
-                    if (j == 0)
-                        massStr[i].append(massWord[i][j].toString());
-                    else
-                        massStr[i].append(" " + massWord[i][j].toString());
-
-                }
+        for (int i = 0; i < line.length; i++)
+            for (int j = 0; j < line[i].size(); j++) {
+                line[i].set(j, line[i].get(j).substring(0, number));
 
             }
-            massStr[i].append("\r\n");
-        }
-
 
     }
 
     //Выравнивает текст по правому краю
-    public void right()  {
-        int maxsize = 0;
-        for (int i = 0; i < strings; i++) {
-            for (int j = 0; j < massStr[i].length(); j++) {
-                if (massStr[i].charAt(j) == '~') {
-                    massStr[i].delete(j - 1, j + 1);
-                    j--;
-                }
+    public void right() {
+        int maxlenght = 0;
+        int linelength[] = new int[line.length];
+        for (int i = 0; i < line.length; i++) {
+            linelength[i] = 0;
+            for (int j = 0; j < line[i].size(); j++) {
+                linelength[i] += line[i].get(j).length();
+                if (j != line[i].size() - 1)
+                    linelength[i]++;
             }
-            if (maxsize < massStr[i].length())
-                maxsize = massStr[i].length();
+            if (linelength[i] > maxlenght)
+                maxlenght = linelength[i];
         }
 
-        for (int i = 0; i < strings; i++) {
-            while (massStr[i].length() < maxsize) {
-                massStr[i].reverse().append(" ").reverse();
+        String s = " ";
+        for (int i = 0; i < line.length; i++) {
+            while (linelength[i] < maxlenght) {
+                linelength[i]++;
+                line[i].add(0, s);
             }
-        }
 
+        }
     }
+
 
     //Записывает текст в документ
     public void writeTo(String ofile) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
-        for (int i = 0; i < strings; i++)
-            writer.write(massStr[i].toString());
+        for (int i = 0; i < line.length; i++) {
+
+            for (int j = 0; j < line[i].size(); j++) {
+                writer.write(line[i].get(j) + " ");
+            }
+            writer.write("\r\n");
+
+        }
         writer.flush();//закрываем потоки i/o, лучше бы все это запихнуть в try/finally
         writer.close();
     }
@@ -186,46 +181,31 @@ public class TransporatorClass {
         System.out.println();
     }
 
-    private void delWaste() {
-        for (int i = 0; i < strings; i++) {
-            for (int j = 0; j < massStr[i].length(); j++) {
-                if (massStr[i].charAt(j) == '~') {
-                    if (j != 0) {
-                        massStr[i].delete(j - 1, j + 1);
-                        j--;
-                    } else {
-                        massStr[i].delete(j, j + 1);
-                    }
-                }
-            }
-        }
-    }
-
 
     public static void main(String[] args) throws IOException {
 
         //ТЕКСТ БЕРЕТСЯ ИЗ ДОКУМЕНТА
-//        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
-//        System.out.println("Входной файл");
-//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
-//        tr.cut(1);
-//        tr.transpose();
-//        tr.right();
-//        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
-//        System.out.println("Полученный текстовый файл ");
-//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
+        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
+        System.out.println("Входной файл");
+        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
+        tr.cut(1);
+        tr.transpose();
+        //tr.right();
+        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
+        System.out.println("Полученный текстовый файл ");
+        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
 
 
-         //   ТЕКСТ ВВОДИТСЯ С КЛАВИАТУРЫ
+        //   ТЕКСТ ВВОДИТСЯ С КЛАВИАТУРЫ
 
-        System.out.println("Исходная матрица");
-        TransporatorClass tr2 = new TransporatorClass();
-        tr2.cut(1);
-        tr2.right();
-        tr2.transpose();
-        tr2.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
-        System.out.println("Полученная матрица ");
-        tr2.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
+//        System.out.println("Исходная матрица");
+//        TransporatorClass tr2 = new TransporatorClass();
+//        tr2.cut(1);
+//        tr2.right();
+//        tr2.transpose();
+//        tr2.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
+//        System.out.println("Полученная матрица ");
+//        tr2.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
 
     }
 

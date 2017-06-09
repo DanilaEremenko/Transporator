@@ -4,8 +4,8 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 public class TransparatorClassLauncher {
-    @Option(name = "-a", usage = "Максимальная длина строки")
-    private int length = 10;
+    @Option(name = "-a", usage = "Максимальная длина слова")
+    private int length;
 
     @Option(name = "-t", usage = "Обрезать строки, длинее -а")
     private boolean trim;
