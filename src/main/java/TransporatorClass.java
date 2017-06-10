@@ -13,9 +13,8 @@ import java.util.Scanner;
 
 
 public class TransporatorClass {
-    private int stringslength[];  //Длины всех строк
-    private int columns = 0;  //Максимальне колличество слов в строке
-    private StringBuilder[] massStr;//Массив хранящий текст разбитый построчно
+
+
     private ArrayList<String>[] line;//Список для хранения текста в строках
 
     TransporatorClass(String file) {
@@ -56,16 +55,14 @@ public class TransporatorClass {
         String massString[];//Промежуточный массив для сплита, можно избавиться
         String s = sb.toString();//Переводим в строку чтобы можно было сплитить(может быть можно сплитить сразу)
         massString = s.split("\n");//Разбиваем на строчки
-        stringslength = new int[massString.length];//Длина каждой строчки, возможно надо будет убрать
 
         String massWord[] = new String[massString.length];//Кажется тоже промежуточный массив,попробуй убрать
 
-        line = new ArrayList[massString.length];//Здесь кажется должно быть <String> но компилятор жалуется
+        line = new ArrayList[massString.length];
         //Запускаем цикл для каждоый строчки
         for (int i = 0; i < massString.length; i++) {
             line[i] = new ArrayList<String>();
             massWord = massString[i].split("\\s+");
-            stringslength[i] = massWord.length;
             for (int j = 0; j < massWord.length; j++) {
                 line[i].add(massWord[j]);
             }
@@ -160,9 +157,9 @@ public class TransporatorClass {
     }
 
 
+        //ПРИМЕРЫ
     public static void main(String[] args) throws IOException {
 
-        //ПРИМЕРЫ
         //ТЕКСТ БЕРЕТСЯ ИЗ ДОКУМЕНТА
 
 //        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
