@@ -1,14 +1,11 @@
-import jdk.jfr.events.ExceptionThrownEvent;
-
 import java.io.*;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Scanner;
 /*(+)Конструкторы
 *(+)transpose
 *(+)cut
 *(+)Запись в новый текстовый файл
-*(-)Выравнивание по правому краю
+*(+)Выравнивание по правому краю
 */
 
 
