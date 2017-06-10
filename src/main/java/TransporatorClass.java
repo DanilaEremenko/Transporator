@@ -16,7 +16,6 @@ public class TransporatorClass {
     private int stringslength[];  //Длины всех строк
     private int columns = 0;  //Максимальне колличество слов в строке
     private StringBuilder[] massStr;//Массив хранящий текст разбитый построчно
-    private ArrayList<String> wordArray = new ArrayList<String>();// Список для хранения текста
     private ArrayList<String>[] line;//Список для хранения текста в строках
 
     TransporatorClass(String file) {
@@ -69,34 +68,13 @@ public class TransporatorClass {
             stringslength[i] = massWord.length;
             for (int j = 0; j < massWord.length; j++) {
                 line[i].add(massWord[j]);
-                wordArray.add(massWord[j]);
             }
-            wordArray.add("\r\n");//В строчку наверное добавлять не надо
+
         }
     }
 
     //Транспонирует текст
     public void transpose() {
-//        ArrayList<String> trAr = new ArrayList<String>();
-//        int numberproh = 0;
-//        int j = 0;
-//        for (int i = 0; ; i++) {
-//            if (trAr.size() == wordArray.size())
-//                break;
-//            if (wordArray.get(i) == "\r\n") {
-//                trAr.add(wordArray.get(i - stringslength[j] + numberproh));
-//                j++;
-//            }
-//            if (i == wordArray.size() - 1) {
-//                i = 0;
-//                j = 0;
-//                trAr.add("\r\n");
-//                numberproh++;
-//            }
-//
-//        }
-//        wordArray = trAr;
-        //Выше старая реализация, сейчас пробуем через строчки
         //Ниже получаем транспонированную матрицу разбитую на строчки
         ArrayList[] temporaryline = new ArrayList[line.length];
         for (int i = 0; i < line.length; i++) {
@@ -111,7 +89,6 @@ public class TransporatorClass {
 
         line = temporaryline;
     }
-    //Если реализация сработает убрать ненужный массив из слов
 
 
     //Обрезает все слова в тексте до заданного размера
@@ -149,14 +126,15 @@ public class TransporatorClass {
         }
     }
 
-
     //Записывает текст в документ
     public void writeTo(String ofile) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
         for (int i = 0; i < line.length; i++) {
 
             for (int j = 0; j < line[i].size(); j++) {
-                writer.write(line[i].get(j) + " ");
+                writer.write(line[i].get(j));
+                if (line[i].get(j) != " ")
+                    writer.write(" ");
             }
             writer.write("\r\n");
 
@@ -184,25 +162,27 @@ public class TransporatorClass {
 
     public static void main(String[] args) throws IOException {
 
+        //ПРИМЕРЫ
         //ТЕКСТ БЕРЕТСЯ ИЗ ДОКУМЕНТА
-        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
-        System.out.println("Входной файл");
-        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
-        tr.cut(1);
-        tr.transpose();
-        //tr.right();
-        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
-        System.out.println("Полученный текстовый файл ");
-        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
+
+//        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
+//        System.out.println("Входной файл");
+//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
+//        tr.cut(1);
+//        tr.transpose();
+//        tr.right();
+//        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
+//        System.out.println("Полученный текстовый файл ");
+//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
 
 
         //   ТЕКСТ ВВОДИТСЯ С КЛАВИАТУРЫ
 
 //        System.out.println("Исходная матрица");
 //        TransporatorClass tr2 = new TransporatorClass();
+//        tr2.transpose();
 //        tr2.cut(1);
 //        tr2.right();
-//        tr2.transpose();
 //        tr2.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
 //        System.out.println("Полученная матрица ");
 //        tr2.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
