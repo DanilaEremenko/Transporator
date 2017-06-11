@@ -84,12 +84,12 @@ public class TransporatorClass {
         line = temporaryline;
     }
 
-
     //Обрезает все слова в тексте до заданного размера
     public void cut(int number) {
         for (int i = 0; i < line.length; i++)
             for (int j = 0; j < line[i].size(); j++) {
-                line[i].set(j, line[i].get(j).substring(0, number));
+                if (line[i].get(j).length() > number)
+                    line[i].set(j, line[i].get(j).substring(0, number));
 
             }
 
@@ -152,37 +152,6 @@ public class TransporatorClass {
 
         System.out.println();
     }
-
-
-        //ПРИМЕРЫ
-    public static void main(String[] args) throws IOException {
-
-        //ТЕКСТ БЕРЕТСЯ ИЗ ДОКУМЕНТА
-
-//        TransporatorClass tr = new TransporatorClass("C:\\Users\\danil\\Desktop\\startedfile.txt");
-//        System.out.println("Входной файл");
-//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\startedfile.txt");
-//        tr.cut(1);
-//        tr.transpose();
-//        tr.right();
-//        tr.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
-//        System.out.println("Полученный текстовый файл ");
-//        tr.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
-
-
-        //   ТЕКСТ ВВОДИТСЯ С КЛАВИАТУРЫ
-
-//        System.out.println("Исходная матрица");
-//        TransporatorClass tr2 = new TransporatorClass();
-//        tr2.transpose();
-//        tr2.cut(1);
-//        tr2.right();
-//        tr2.writeTo("C:\\Users\\danil\\Desktop\\endedfile.txt");
-//        System.out.println("Полученная матрица ");
-//        tr2.getTextofFile("C:\\Users\\danil\\Desktop\\endedfile.txt");
-
-    }
-
 
 }
 
