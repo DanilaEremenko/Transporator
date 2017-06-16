@@ -5,6 +5,8 @@ import org.kohsuke.args4j.Option;
 
 import java.io.IOException;
 
+
+
 public class TransparatorClassLauncher {
     @Option(name = "-a", usage = "Максимальная длина слова")
     private int length;
