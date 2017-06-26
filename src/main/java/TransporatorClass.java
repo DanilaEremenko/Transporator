@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 /*(+)Конструкторы
 *(+)transpose
@@ -10,7 +11,6 @@ import java.util.Scanner;
 
 
 public class TransporatorClass {
-
 
     private ArrayList<String>[] line;//Список для хранения текста в строках
 
@@ -48,12 +48,10 @@ public class TransporatorClass {
     }
 
     private void makeArrayWord(StringBuilder sb) {
-        //Пока что на выходе имеем полный список и список рахбитый на строчки, от одного потом надо будет избавиться
-        String massString[];//Промежуточный массив для сплита, можно избавиться
-        String s = sb.toString();//Переводим в строку чтобы можно было сплитить(может быть можно сплитить сразу)
-        massString = s.split("\n");//Разбиваем на строчки
+        String massString[];
+        massString = sb.toString().split("\n");//Разбиваем на строчки
 
-        String massWord[] = new String[massString.length];//Кажется тоже промежуточный массив,попробуй убрать
+        String massWord[] = new String[massString.length];//
 
         line = new ArrayList[massString.length];
         //Запускаем цикл для каждоый строчки
@@ -61,7 +59,8 @@ public class TransporatorClass {
             line[i] = new ArrayList<String>();
             massWord = massString[i].split("\\s+");
             for (int j = 0; j < massWord.length; j++) {
-                line[i].add(massWord[j]);
+                if (massWord[j] != "")
+                    line[i].add(massWord[j]);
             }
 
         }
@@ -114,7 +113,7 @@ public class TransporatorClass {
         for (int i = 0; i < line.length; i++) {
             while (linelength[i] < maxlenght) {
                 linelength[i]++;
-                line[i].add(0, s);
+                line[i].set(0, s + line[i].get(0));
             }
 
         }
@@ -124,16 +123,21 @@ public class TransporatorClass {
     public void writeTo(String ofile) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
         for (int i = 0; i < line.length; i++) {
-
             for (int j = 0; j < line[i].size(); j++) {
                 writer.write(line[i].get(j));
-                if (line[i].get(j) != " ")
-                    writer.write(" ");
+                writer.write(" ");
             }
             writer.write("\r\n");
 
         }
-        writer.flush();//закрываем потоки i/o, лучше бы все это запихнуть в try/finally
+        writer.flush();//закрываем потоки i/o
+        writer.close();
+    }
+
+    public void clear(String ofile) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
+        writer.write("");
+        writer.flush();//закрываем потоки i/o
         writer.close();
     }
 
@@ -153,6 +157,28 @@ public class TransporatorClass {
         System.out.println();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TransporatorClass that = (TransporatorClass) o;
+
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(line, that.line);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(line);
+    }
+
+    @Override
+    public String toString() {
+        return "TransporatorClass{" +
+                "line=" + Arrays.toString(line) +
+                '}';
+    }
 }
 
 
