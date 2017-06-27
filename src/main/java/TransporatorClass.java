@@ -6,13 +6,15 @@ import java.util.Scanner;
 *(+)transpose
 *(+)cut
 *(+)Запись в новый текстовый файл
-*(+)Выравнивание по правому краю
+*(+)Выравнивание по правому краю переделано
 */
 
 
 public class TransporatorClass {
 
+    private String s="";
     private ArrayList<String>[] line;//Список для хранения текста в строках
+    private int maxelements = 0;
 
     TransporatorClass(String file) {
         StringBuilder sb = new StringBuilder();
@@ -58,12 +60,16 @@ public class TransporatorClass {
         for (int i = 0; i < massString.length; i++) {
             line[i] = new ArrayList<String>();
             massWord = massString[i].split("\\s+");
+            if (massWord.length > maxelements)
+                maxelements = massWord.length;
             for (int j = 0; j < massWord.length; j++) {
-                if (massWord[j] != "")
+                if (!massWord[j].equals(""))
                     line[i].add(massWord[j]);
             }
 
         }
+
+
     }
 
     //Транспонирует текст
@@ -94,27 +100,51 @@ public class TransporatorClass {
 
     }
 
-    //Выравнивает текст по правому краю
-    public void right() {
+    //Выравнивает текст по левому краю
+    public void left() {
+
         int maxlenght = 0;
-        int linelength[] = new int[line.length];
-        for (int i = 0; i < line.length; i++) {
-            linelength[i] = 0;
-            for (int j = 0; j < line[i].size(); j++) {
-                linelength[i] += line[i].get(j).length();
-                if (j != line[i].size() - 1)
-                    linelength[i]++;
+        for (int i = 1; i < maxelements; i++) {
+            for (int j = 0; j < line.length; j++) {
+                if (i > line[j].size()) {
+                } else if (maxlenght < line[j].get(i - 1).length())
+                    maxlenght = line[j].get(i - 1).length();
+
             }
-            if (linelength[i] > maxlenght)
-                maxlenght = linelength[i];
+
+            for (int j = 0; j < line.length; j++) {
+                if (i <= line[j].size()) {
+                    while (line[j].get(i - 1).length() < maxlenght)
+                        line[j].set(i - 1, line[j].get(i - 1) + " ");
+                }
+
+            }
         }
 
-        String s = " ";
-        for (int i = 0; i < line.length; i++) {
-            while (linelength[i] < maxlenght) {
-                linelength[i]++;
-                line[i].set(0, s + line[i].get(0));
+    }
+
+    //Выравнивает текст по правому краю
+    public void right() {
+
+        int maxlenght = 0;
+
+
+        for (int i = 0; i < maxelements; i++) {
+            for (int j = 0; j < line.length; j++) {
+                while (line[j].size() < maxelements)
+                    line[j].add(0, " ");
+
+                if (maxlenght < line[j].get(i).length())
+                    maxlenght = line[j].get(i).length();
             }
+            for (int j = 0; j < line.length; j++) {
+
+                while (line[j].get(i).length() < maxlenght)
+                    line[j].set(i, " " + line[j].get(i));
+
+
+            }
+
 
         }
     }
@@ -122,14 +152,7 @@ public class TransporatorClass {
     //Записывает текст в документ
     public void writeTo(String ofile) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
-        for (int i = 0; i < line.length; i++) {
-            for (int j = 0; j < line[i].size(); j++) {
-                writer.write(line[i].get(j));
-                writer.write(" ");
-            }
-            writer.write("\r\n");
-
-        }
+        writer.write(this.toString());
         writer.flush();//закрываем потоки i/o
         writer.close();
     }
@@ -175,9 +198,19 @@ public class TransporatorClass {
 
     @Override
     public String toString() {
-        return "TransporatorClass{" +
-                "line=" + Arrays.toString(line) +
-                '}';
+        s="";
+        for (int i = 0; i < line.length; i++) {
+            for (int j = 0; j < line[i].size(); j++) {
+                s += line[i].get(j);
+                if (j != line[i].size() - 1)
+                    s += " ";
+
+            }
+            if (i != line.length - 1)
+                s += "\n";
+
+        }
+        return s;
     }
 }
 

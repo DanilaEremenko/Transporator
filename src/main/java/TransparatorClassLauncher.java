@@ -6,7 +6,6 @@ import org.kohsuke.args4j.Option;
 import java.io.IOException;
 
 
-
 public class TransparatorClassLauncher {
     @Option(name = "-a", usage = "Максимальная длина слова")
     private int length;
@@ -48,8 +47,9 @@ public class TransparatorClassLauncher {
         if (trim)
             tr.cut(length);
 
-        if (isRight)
+        if (isRight) {
             tr.right();
+        } else tr.left();
 
         if (!outputFileName.equals("")) {
             try {
