@@ -5,8 +5,9 @@ import java.util.Scanner;
 /*(+)Конструкторы
 *(+)transpose
 *(+)cut
+*(+)right
+*(+)left
 *(+)Запись в новый текстовый файл
-*(+)Выравнивание по правому краю переделано
 */
 
 
@@ -14,7 +15,7 @@ public class TransporatorClass {
 
     private String s="";
     private ArrayList<String>[] line;//Список для хранения текста в строках
-    private int maxelements = 0;
+    private int maxelements = 0;//Кол-во столбцов в самый длинной строчке
 
     TransporatorClass(String file) {
         StringBuilder sb = new StringBuilder();
@@ -157,28 +158,6 @@ public class TransporatorClass {
         writer.close();
     }
 
-    public void clear(String ofile) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
-        writer.write("");
-        writer.flush();//закрываем потоки i/o
-        writer.close();
-    }
-
-    //Выводит текст документа на консоль по адресу
-    public void getTextofFile(String file) {
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            int c;
-            while ((c = br.read()) != -1) {
-                System.out.print((char) c);
-            }
-            br.close();
-        } catch (IOException ex) {
-
-            System.out.println(ex.getMessage());
-        }
-
-        System.out.println();
-    }
 
     @Override
     public boolean equals(Object o) {
