@@ -90,7 +90,7 @@ public class Tests {
           CCCC CC CCC
           D DDDD DDD DD*/
 
-
+        //1.test
         //Обрезка слов до длины 3 и выравнивание по правому краю
         System.out.println("TransparatorClassLauncher");
         String[] args1 = new String[7];
@@ -112,6 +112,8 @@ public class Tests {
                          "      A CCC DDD\n" +
                          "         AA  DD"));
 
+
+        //2.test
         //Обрезка слов до длины 3 и выравнивание по левому краю
         String[] args2 = new String[6];
         args2[0] = "-a";//Максимальная длина
@@ -132,7 +134,7 @@ public class Tests {
 
 
 
-
+        //3.test
         //Транспонирование без обрезки
         String[] args3 = new String[3];
         args3[0] = "-o";//Выходной файл
@@ -150,6 +152,24 @@ public class Tests {
                          "AA   DD  "));
 
 
+        //4.test
+        // Выравнивание слов по левому краю(по заданию)
+        String[] args4 = new String[5];
+        args4[0] = "-a";//Максимальная длина
+        args4[1] = "3";
+        args4[2] = "-o";//Выходной файл
+        args4[3] = "TRLout4.txt";
+        args4[4] = "TRLin.txt";
+        TransparatorClassLauncher.main(args4);
+
+        tr=new TransporatorClass("TRLout4.txt");
+        tr.left(3);
+        System.out.println("4.test "+
+                tr.toString().equals
+                        ("AAA BB  CCCC D\n" +
+                         "AAAA B   CC  DDDD\n" +
+                         "A   CCC DDD\n" +
+                         "AA  DD "));
 
 
 

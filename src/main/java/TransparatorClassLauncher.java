@@ -22,11 +22,11 @@ public class TransparatorClassLauncher {
     @Argument(usage = "Имя входного файла")
     private String inputFileName = "";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new TransparatorClassLauncher().launch(args);
     }
 
-    private void launch(String[] args) {
+    private void launch(String[] args) throws IOException {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
@@ -37,9 +37,6 @@ public class TransparatorClassLauncher {
 
         TransporatorClass tr;
 
-        if (inputFileName.equals(""))
-            tr = new TransporatorClass();
-        else
             tr = new TransporatorClass(inputFileName);
 
         tr.transpose();
@@ -49,7 +46,7 @@ public class TransparatorClassLauncher {
 
         if (isRight) {
             tr.right();
-        } else tr.left();
+        } else tr.left(length);
 
         if (!outputFileName.equals("")) {
             try {
@@ -57,7 +54,8 @@ public class TransparatorClassLauncher {
             } catch (IOException e) {
             }
 
-        }
+        }else
+            tr.writeTo();
     }
 
 }

@@ -1,42 +1,38 @@
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-/*(+)Конструкторы
-*(+)transpose
-*(+)cut
-*(+)right
-*(+)left
-*(+)Запись в новый текстовый файл
-*/
 
 
 public class TransporatorClass {
 
-    private String s="";
+    private String s = "";
     private ArrayList<String>[] line;//Список для хранения текста в строках
     private int maxelements = 0;//Кол-во столбцов в самый длинной строчке
 
-    TransporatorClass(String file) {
+    TransporatorClass(String file) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            // чтение посимвольно
-            int c;
-            while ((c = br.read()) != -1) {
-                sb.append((char) c);
-            }
-            br.close();
-        } catch (IOException ex) {
+        Scanner sc = new Scanner(Paths.get(file));
+        while (sc.hasNextLine())
+            sb.append(sc.nextLine() + "\n");
 
-            System.out.println(ex.getMessage());
-        }
+
+        //Если текстовый файл пустой
+        if (sb.length() == 0)
+            sb = empty(sb);
+
+
+        sc.close();
         makeArrayWord(sb);
 
     }
 
-    TransporatorClass() {
+
+    //Если текстовый файл пустой
+    private StringBuilder empty(StringBuilder sb) {
         System.out.println("Введите текст");
-        StringBuilder sb = new StringBuilder();
+        sb = new StringBuilder();
         Scanner sc = new Scanner(System.in);
         String s;
         for (; ; ) {
@@ -44,17 +40,16 @@ public class TransporatorClass {
             if (s.length() == 0) {
                 break;
             } else
-                sb.append(s + "\r\n");
+                sb.append(s + "\n");
         }
-        makeArrayWord(sb);
-
+        return sb;
     }
 
     private void makeArrayWord(StringBuilder sb) {
         String massString[];
         massString = sb.toString().split("\n");//Разбиваем на строчки
 
-        String massWord[] = new String[massString.length];//
+        String massWord[];
 
         line = new ArrayList[massString.length];
         //Запускаем цикл для каждоый строчки
@@ -112,7 +107,6 @@ public class TransporatorClass {
                     maxlenght = line[j].get(i - 1).length();
 
             }
-
             for (int j = 0; j < line.length; j++) {
                 if (i <= line[j].size()) {
                     while (line[j].get(i - 1).length() < maxlenght)
@@ -121,6 +115,19 @@ public class TransporatorClass {
 
             }
         }
+
+    }
+
+    public void left(int maxlenght) {
+        for (int i = 1; i < maxelements; i++)
+            for (int j = 0; j < line.length; j++) {
+                if (i <= line[j].size()) {
+                    while (line[j].get(i - 1).length() < maxlenght)
+                        line[j].set(i - 1, line[j].get(i - 1) + " ");
+                }
+
+            }
+
 
     }
 
@@ -159,6 +166,10 @@ public class TransporatorClass {
     }
 
 
+    public void writeTo() {
+        System.out.println(this.toString());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,7 +188,7 @@ public class TransporatorClass {
 
     @Override
     public String toString() {
-        s="";
+        s = "";
         for (int i = 0; i < line.length; i++) {
             for (int j = 0; j < line[i].size(); j++) {
                 s += line[i].get(j);
@@ -191,7 +202,10 @@ public class TransporatorClass {
         }
         return s;
     }
+
+
 }
+
 
 
 
