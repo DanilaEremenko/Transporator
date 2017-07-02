@@ -92,7 +92,7 @@ public class Tests {
 
         //1.test
         //Обрезка слов до длины 3 и выравнивание по правому краю
-        System.out.println("TransparatorClassLauncher");
+        System.out.println("\nTransparatorClassLauncher");
         String[] args1 = new String[7];
         args1[0] = "-a";//Максимальная длина
         args1[1] = "3";
@@ -170,6 +170,16 @@ public class Tests {
                          "AAAA B   CC  DDDD\n" +
                          "A   CCC DDD\n" +
                          "AA  DD "));
+
+        //Вывод на консоль, когда не указан выходной файл
+        System.out.println("\nВывод на консоль");
+        String[] args5 = new String[4];
+        args5[0] = "-a";//Максимальная длина
+        args5[1] = "3";
+        args5[2] = "-t";
+        args5[3] = "TRLin.txt";
+        TransparatorClassLauncher.main(args5);
+
 
 
 
