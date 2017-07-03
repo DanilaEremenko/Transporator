@@ -26,6 +26,8 @@ public class TransparatorClassLauncher {
         new TransparatorClassLauncher().launch(args);
     }
 
+
+
     private void launch(String[] args) throws IOException {
         CmdLineParser parser = new CmdLineParser(this);
         try {

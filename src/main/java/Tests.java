@@ -102,6 +102,7 @@ public class Tests {
         args1[5] = "TRLout1.txt";
         args1[6] = "TRLin.txt";
 
+
         TransparatorClassLauncher.main(args1);
         tr=new TransporatorClass("TRLout1.txt");
         tr.right();
