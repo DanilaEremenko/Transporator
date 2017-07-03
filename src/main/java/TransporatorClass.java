@@ -1,3 +1,5 @@
+import sun.invoke.empty.Empty;
+
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,20 +13,28 @@ public class TransporatorClass {
     private ArrayList<String>[] line;//Список для хранения текста в строках
     private int maxelements = 0;//Кол-во столбцов в самый длинной строчке
 
-    TransporatorClass(String file) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        Scanner sc = new Scanner(Paths.get(file));
-        while (sc.hasNextLine())
-            sb.append(sc.nextLine() + "\n");
+    TransporatorClass(String file) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            Scanner sc = new Scanner(Paths.get(file));
+            while (sc.hasNextLine())
+                sb.append(sc.nextLine() + "\n");
 
 
-        //Если текстовый файл пустой
-        if (sb.length() == 0)
+            //Если текстовый файл пустой
+            if (sb.length() == 0)
+                sb = empty(sb);
+
+
+            sc.close();
+            makeArrayWord(sb);
+        } catch (IOException e) {
+            StringBuilder sb = new StringBuilder();
             sb = empty(sb);
+            makeArrayWord(sb);
+            return;
 
-
-        sc.close();
-        makeArrayWord(sb);
+        }
 
     }
 
@@ -118,6 +128,7 @@ public class TransporatorClass {
 
     }
 
+    //Выравнивание текста по левому краю по заданию
     public void left(int maxlenght) {
         for (int i = 1; i < maxelements; i++)
             for (int j = 0; j < line.length; j++) {
@@ -157,12 +168,32 @@ public class TransporatorClass {
         }
     }
 
+    //Выравнивание текста по правому краю по заданию
+    public void right(int maxlenght) {
+        for (int i = 0; i < maxelements; i++)
+            for (int j = 0; j < line.length; j++) {
+                if (i >= line[j].size()-1)
+                    j++;
+                else {
+                    while (line[j].get(i).length() < maxlenght)
+                        line[j].set(i, " " + line[j].get(i));
+                }
+            }
+
+
+    }
+
     //Записывает текст в документ
-    public void writeTo(String ofile) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
-        writer.write(this.toString());
-        writer.flush();//закрываем потоки i/o
-        writer.close();
+    public void writeTo(String ofile) {
+        try {
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(ofile));
+            writer.write(this.toString());
+            writer.flush();//закрываем потоки i/o
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(this.toString());
+        }
     }
 
 
@@ -202,7 +233,6 @@ public class TransporatorClass {
         }
         return s;
     }
-
 
 }
 
