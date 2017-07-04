@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class TransparatorClassLauncher {
     @Option(name = "-a", usage = "Максимальная длина слова")
-    private int length=0;
+    private int length = 0;
 
     @Option(name = "-t", usage = "Обрезать строки, длинее -а")
     private boolean trim;
@@ -27,7 +27,6 @@ public class TransparatorClassLauncher {
     }
 
 
-
     private void launch(String[] args) throws IOException {
         CmdLineParser parser = new CmdLineParser(this);
         try {
@@ -39,16 +38,21 @@ public class TransparatorClassLauncher {
 
         TransporatorClass tr;
 
-        tr = new TransporatorClass(inputFileName);
+        if (inputFileName != "")
+            tr = new TransporatorClass(inputFileName);
+        else
+            tr = new TransporatorClass();
 
         tr.transpose();
 
-        if (trim&&length!=0)
+        if (trim && length != 0)
             tr.cut(length);
 
-        if (isRight)
+        if (isRight) {
+            if (length == 0)
+                length = 10;
             tr.right(length);
-        else
+        } else
             tr.left(length);
 
         if (!outputFileName.equals(""))

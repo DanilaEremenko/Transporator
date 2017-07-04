@@ -13,28 +13,24 @@ public class TransporatorClass {
     private ArrayList<String>[] line;//Список для хранения текста в строках
     private int maxelements = 0;//Кол-во столбцов в самый длинной строчке
 
-    TransporatorClass(String file) {
-        try {
-            StringBuilder sb = new StringBuilder();
-            Scanner sc = new Scanner(Paths.get(file));
-            while (sc.hasNextLine())
-                sb.append(sc.nextLine() + "\n");
+    public TransporatorClass(String file) throws IOException {
+
+        StringBuilder sb = new StringBuilder();
+        Scanner sc = new Scanner(Paths.get(file));
+        while (sc.hasNextLine())
+            sb.append(sc.nextLine() + "\n");
 
 
-            //Если текстовый файл пустой
-            if (sb.length() == 0)
-                sb = empty(sb);
+        sc.close();
+        makeArrayWord(sb);
 
 
-            sc.close();
-            makeArrayWord(sb);
-        } catch (IOException e) {
-            StringBuilder sb = new StringBuilder();
-            sb = empty(sb);
-            makeArrayWord(sb);
-            return;
+    }
 
-        }
+    public TransporatorClass() {
+        StringBuilder sb = new StringBuilder();
+        sb = empty(sb);
+        makeArrayWord(sb);
 
     }
 
@@ -81,11 +77,13 @@ public class TransporatorClass {
     //Транспонирует текст
     public void transpose() {
         //Ниже получаем транспонированную матрицу разбитую на строчки
-        ArrayList[] temporaryline = new ArrayList[line.length];
-        for (int i = 0; i < line.length; i++) {
+        ArrayList[] temporaryline = new ArrayList[maxelements];
+        for (int i = 0; i < maxelements; i++) {
             temporaryline[i] = new ArrayList<String>();
             for (int j = 0; j < line.length; j++) {
-                if (i < line[j].size())
+                if (i >= line[j].size())
+                    j++;
+                else
                     temporaryline[i].add(line[j].get(i));
 
             }
@@ -172,7 +170,7 @@ public class TransporatorClass {
     public void right(int maxlenght) {
         for (int i = 0; i < maxelements; i++)
             for (int j = 0; j < line.length; j++) {
-                if (i >= line[j].size()-1)
+                if (i >= line[j].size())
                     j++;
                 else {
                     while (line[j].get(i).length() < maxlenght)
@@ -233,6 +231,7 @@ public class TransporatorClass {
         }
         return s;
     }
+
 
 }
 
