@@ -13,13 +13,13 @@ public class Tests {
           C CC
           D D D*/
 
-        tr.left();
+        tr.left(5);
         tr.writeTo("TC3.txt");
         System.out.println("left      " + tr.toString().equals
-                ("AA   AAAA AAAA  AAA\n" +
-                 "BBBB BBB  BBBBB BBB\n" +
-                 "C    CC  \n" +
-                 "D    D    D    "));
+                ("AA    AAAA  AAAA  AAA  \n" +
+                 "BBBB  BBB   BBBBB BBB  \n" +
+                 "C     CC   \n" +
+                 "D     D     D    "));
 
 
         tr = new TransporatorClass("TC3.txt");
@@ -29,11 +29,12 @@ public class Tests {
           C    CC
           D    D    D    */
 
-        tr.right();
-        System.out.println("right     " + tr.toString().equals("  AA AAAA  AAAA   AAA\n" +
-                "BBBB  BBB BBBBB   BBB\n" +
-                "              C    CC\n" +
-                "        D     D     D"));
+        tr.right(4);
+        System.out.println("right     " + tr.toString().equals(
+                "  AA AAAA AAAA  AAA\n" +
+                "BBBB  BBB BBBBB  BBB\n" +
+                "   C   CC\n" +
+                "   D    D    D"));
 
 
         //ПРИМЕР ТРАНСПОНИРОВАНИЯ
@@ -46,11 +47,11 @@ public class Tests {
           D DDDD DDD DD*/
 
         tr.transpose();
-        tr.left();
+        tr.left(4);
         System.out.println("transpose " + tr.toString().equals
-                ("AAA  BB   CCCC D\n" +
+                ("AAA  BB   CCCC D   \n" +
                  "AAAA B    CC   DDDD\n" +
-                 "A    DDD \n" +
+                 "A    CCC  DDD \n" +
                  "AA   DD  "));
 
         //ПРИМЕР ОБРЕЗКИ СЛОВ ДО ОПРЕДЕЛННОЙ ДЛИНЫ
@@ -63,13 +64,13 @@ public class Tests {
           D DDDD DDD DD*/
 
         tr.cut(2);
-        tr.left();
+        tr.left(5);
         tr.writeTo("wtf.txt");
         System.out.println("cut       " + tr.toString().equals
-                ("AA AA A  AA\n" +
-                 "BB B \n" +
-                 "CC CC CC\n" +
-                 "D  DD DD DD"));
+                ("AA    AA    A     AA   \n" +
+                 "BB    B    \n" +
+                 "CC    CC    CC   \n" +
+                 "D     DD    DD    DD   "));
 
 
         //ТЕСТЫ ДЛЯ TransporatorClassLauncher
@@ -100,7 +101,7 @@ public class Tests {
                 tr.toString().equals
                         ("AAA  BB CCC   D\n" +
                          "AAA   B  CC DDD\n" +
-                         "  A DDD\n" +
+                         "  A CCC DDD\n" +
                          " AA  DD"));
 
 
@@ -118,9 +119,9 @@ public class Tests {
         tr.left(3);
         System.out.println("2.test " +
                 tr.toString().equals
-                        ("AAA BB  CCC D\n" +
+                        ("AAA BB  CCC D  \n" +
                          "AAA B   CC  DDD\n" +
-                         "A   DDD\n" +
+                         "A   CCC DDD\n" +
                          "AA  DD "));
 
 
@@ -133,13 +134,13 @@ public class Tests {
         TransparatorClassLauncher.main(args3);
 
         tr = new TransporatorClass("TRLout3.txt");
-        tr.left(1);
+        tr.left(10);
         System.out.println("3.test " +
                 tr.toString().equals
-                        ("AAA BB CCCC D\n" +
-                         "AAAA B CC DDDD\n" +
-                         "A DDD\n" +
-                         "AA DD"));
+                        ("AAA        BB         CCCC       D         \n" +
+                         "AAAA       B          CC         DDDD      \n" +
+                         "A          CCC        DDD       \n" +
+                         "AA         DD        "));
 
 
         //4.test
@@ -156,9 +157,9 @@ public class Tests {
         tr.left(3);
         System.out.println("4.test " +
                 tr.toString().equals
-                        ("AAA BB  CCCC D\n" +
+                        ("AAA BB  CCCC D  \n" +
                          "AAAA B   CC  DDDD\n" +
-                         "A   DDD\n" +
+                         "A   CCC DDD\n" +
                          "AA  DD "));
 
 
@@ -191,9 +192,9 @@ public class Tests {
         tr.left(4);
         System.out.println("Правильное выраванивание по левому краю");
         System.out.println(tr.toString().equals
-                ("A    A    A    A\n" +
-                 "BB   BB   BB   BB\n" +
-                 "CCC  CCC  CCC  CCC\n" +
+                ("A    A    A    A   \n" +
+                 "BB   BB   BB   BB  \n" +
+                 "CCC  CCC  CCC  CCC \n" +
                  "DDDD DDDD DDDD DDDD\n" +
                  "EEEEE EEEEE EEEEE EEEEE"));
 

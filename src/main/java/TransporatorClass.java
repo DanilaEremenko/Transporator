@@ -9,9 +9,10 @@ import java.util.Scanner;
 
 public class TransporatorClass {
 
-    private String s = "";
-    private ArrayList<String>[] line;//Список для хранения текста в строках
+
+    private ArrayList<String> line = new ArrayList<>();//Список для хранения текста в строках
     private int maxelements = 0;//Кол-во столбцов в самый длинной строчке
+
 
     public TransporatorClass(String file) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -34,13 +35,13 @@ public class TransporatorClass {
 
     //Если текстовый файл пустой
     private StringBuilder empty(StringBuilder sb, Scanner sc) {
-        int a=0;
+        int a = 0;
         while (sc.hasNext()) {
             sb.append(sc.nextLine());
-            if(a==sb.length())
+            if (a == sb.length())
                 break;
             sb.append("\n");
-            a=sb.length();
+            a = sb.length();
         }
 
         return sb;
@@ -50,20 +51,20 @@ public class TransporatorClass {
         String massString[];
         massString = sb.toString().split("\n");//Разбиваем на строчки
 
+
         String massWord[];
 
-        line = new ArrayList[massString.length];
         //Запускаем цикл для каждоый строчки
         for (int i = 0; i < massString.length; i++) {
-            line[i] = new ArrayList<String>();
             massWord = massString[i].split("\\s+");
             if (massWord.length > maxelements)
                 maxelements = massWord.length;
             for (int j = 0; j < massWord.length; j++) {
                 if (!massWord[j].equals(""))
-                    line[i].add(massWord[j]);
+                    line.add(massWord[j]);
             }
 
+            line.add("\n");
         }
 
 
@@ -72,16 +73,21 @@ public class TransporatorClass {
     //Транспонирует текст
     public void transpose() {
         //Ниже получаем транспонированную матрицу разбитую на строчки
-        ArrayList[] temporaryline = new ArrayList[maxelements];
+        ArrayList<String> temporaryline = new ArrayList();
+        int k = 0;//Когда был предыдущий n, чтобы проверить что не залезаем в предыдущую строчку
         for (int i = 0; i < maxelements; i++) {
-            temporaryline[i] = new ArrayList<String>();
-            for (int j = 0; j < line.length; j++) {
-                if (i >= line[j].size())
-                    j++;
-                else
-                    temporaryline[i].add(line[j].get(i));
+            for (int j = 0; j < line.size(); j++) {
+                if (line.get(j).equals("\n")) {
+                    if ((i + k) < j)
+                        temporaryline.add(line.get(i + k));
+                    k = j + 1;
+                }
+
 
             }
+            temporaryline.add("\n");
+            k = 0;
+
 
         }
 
@@ -90,88 +96,29 @@ public class TransporatorClass {
 
     //Обрезает все слова в тексте до заданного размера
     public void cut(int number) {
-        for (int i = 0; i < line.length; i++)
-            for (int j = 0; j < line[i].size(); j++) {
-                if (line[i].get(j).length() > number)
-                    line[i].set(j, line[i].get(j).substring(0, number));
+        for (int i=0;i<line.size();i++)
+            if (line.get(i).length() > number && !line.get(i).equals("\n"))
+                line.set(i,line.get(i).substring(0, number));
 
-            }
-
-    }
-
-    //Выравнивает текст по левому краю
-    public void left() {
-
-        int maxlenght = 0;
-        for (int i = 1; i < maxelements; i++) {
-            for (int j = 0; j < line.length; j++) {
-                if (i > line[j].size()) {
-                } else if (maxlenght < line[j].get(i - 1).length())
-                    maxlenght = line[j].get(i - 1).length();
-
-            }
-            for (int j = 0; j < line.length; j++) {
-                if (i <= line[j].size()) {
-                    while (line[j].get(i - 1).length() < maxlenght)
-                        line[j].set(i - 1, line[j].get(i - 1) + " ");
-                }
-
-            }
-        }
 
     }
 
     //Выравнивание текста по левому краю по заданию
     public void left(int maxlenght) {
-        for (int i = 1; i < maxelements; i++)
-            for (int j = 0; j < line.length; j++) {
-                if (i <= line[j].size()) {
-                    while (line[j].get(i - 1).length() < maxlenght)
-                        line[j].set(i - 1, line[j].get(i - 1) + " ");
-                }
-
-            }
-
+        for (int i = 0; i < line.size(); i++)
+            if (!line.get(i).equals("\n"))
+                while (line.get(i).length() < maxlenght)
+                    line.set(i, line.get(i) + " ");
 
     }
 
-    //Выравнивает текст по правому краю
-    public void right() {
-
-        int maxlenght = 0;
-
-
-        for (int i = 0; i < maxelements; i++) {
-            for (int j = 0; j < line.length; j++) {
-                while (line[j].size() < maxelements)
-                    line[j].add(0, " ");
-
-                if (maxlenght < line[j].get(i).length())
-                    maxlenght = line[j].get(i).length();
-            }
-            for (int j = 0; j < line.length; j++) {
-
-                while (line[j].get(i).length() < maxlenght)
-                    line[j].set(i, " " + line[j].get(i));
-
-
-            }
-
-
-        }
-    }
 
     //Выравнивание текста по правому краю по заданию
     public void right(int maxlenght) {
-        for (int i = 0; i < maxelements; i++)
-            for (int j = 0; j < line.length; j++) {
-                if (i >= line[j].size())
-                    j++;
-                else {
-                    while (line[j].get(i).length() < maxlenght)
-                        line[j].set(i, " " + line[j].get(i));
-                }
-            }
+        for (int i = 0; i < line.size(); i++)
+            if (!line.get(i).equals("\n"))
+                while (line.get(i).length() < maxlenght)
+                    line.set(i, " " + line.get(i));
 
 
     }
@@ -194,6 +141,7 @@ public class TransporatorClass {
         System.out.println(this.toString());
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -201,43 +149,79 @@ public class TransporatorClass {
 
         TransporatorClass that = (TransporatorClass) o;
 
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(line, that.line);
+        if (maxelements != that.maxelements) return false;
+        return line != null ? line.equals(that.line) : that.line == null;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(line);
+        int result = line != null ? line.hashCode() : 0;
+        result = 31 * result + maxelements;
+        return result;
     }
 
     @Override
     public String toString() {
-        s = "";
-        for (int i = 0; i < line.length; i++) {
-            for (int j = 0; j < line[i].size(); j++) {
-                s += line[i].get(j);
-                if (j != line[i].size() - 1)
-                    s += " ";
+        String s = "";
+        for (int i = 0; i < line.size() - 1; i++)
+            if (!line.get(i).equals("\n") && !line.get(i + 1).equals("\n"))
+                s += line.get(i) + " ";
+            else
+                s += line.get(i);
 
-            }
-            if (i != line.length - 1)
-                s += "\n";
-
-        }
         return s;
+
+
     }
-
-    public static void main(String[] args) throws IOException {
-        TransporatorClass tr = new TransporatorClass("wtf.txt");
-        TransporatorClass tr2 = new TransporatorClass();
-        tr.writeTo();
-        tr2.writeTo();
-    }
-
-
 }
 
+//Выравнивает текст по левому краю
+//    public void left() {
+//
+//        int maxlenght = 0;
+//        for (int i = 1; i < maxelements; i++) {
+//            for (int j = 0; j < line.length; j++) {
+//                if (i > line[j].size()) {
+//                } else if (maxlenght < line[j].get(i - 1).length())
+//                    maxlenght = line[j].get(i - 1).length();
+//
+//            }
+//            for (int j = 0; j < line.length; j++) {
+//                if (i <= line[j].size()) {
+//                    while (line[j].get(i - 1).length() < maxlenght)
+//                        line[j].set(i - 1, line[j].get(i - 1) + " ");
+//                }
+//
+//            }
+//        }
+//
+//    }
+//
 
 
-
-
+//    //Выравнивает текст по правому краю
+//    public void right() {
+//
+//        int maxlenght = 0;
+//
+//
+//        for (int i = 0; i < maxelements; i++) {
+//            for (int j = 0; j < line.length; j++) {
+//                while (line[j].size() < maxelements)
+//                    line[j].add(0, " ");
+//
+//                if (maxlenght < line[j].get(i).length())
+//                    maxlenght = line[j].get(i).length();
+//            }
+//            for (int j = 0; j < line.length; j++) {
+//
+//                while (line[j].get(i).length() < maxlenght)
+//                    line[j].set(i, " " + line[j].get(i));
+//
+//
+//            }
+//
+//
+//        }
+//    }
+//
