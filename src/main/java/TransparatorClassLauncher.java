@@ -45,7 +45,7 @@ public class TransparatorClassLauncher {
 
         tr.transpose();
 
-        if (trim && length != 0)
+        if (trim)
             tr.cut(length);
 
         if (isRight) {
