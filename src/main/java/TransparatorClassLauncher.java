@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class TransparatorClassLauncher {
     @Option(name = "-a", usage = "Максимальная длина слова")
-    private int length = 0;
+    private int length = 10;
 
     @Option(name = "-t", usage = "Обрезать строки, длинее -а")
     private boolean trim;
@@ -49,8 +49,6 @@ public class TransparatorClassLauncher {
             tr.cut(length);
 
         if (isRight) {
-            if (length == 0)
-                length = 10;
             tr.right(length);
         } else
             tr.left(length);

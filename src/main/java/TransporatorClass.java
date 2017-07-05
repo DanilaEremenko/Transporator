@@ -14,40 +14,35 @@ public class TransporatorClass {
     private int maxelements = 0;//Кол-во столбцов в самый длинной строчке
 
     public TransporatorClass(String file) throws IOException {
-
         StringBuilder sb = new StringBuilder();
         Scanner sc = new Scanner(Paths.get(file));
-        while (sc.hasNextLine())
-            sb.append(sc.nextLine() + "\n");
-
-
-        sc.close();
+        sb = empty(sb, sc);
         makeArrayWord(sb);
 
 
     }
 
     public TransporatorClass() {
+        System.out.println("Введите текст");
         StringBuilder sb = new StringBuilder();
-        sb = empty(sb);
+        Scanner sc = new Scanner(System.in);
+        sb = empty(sb, sc);
         makeArrayWord(sb);
 
     }
 
 
     //Если текстовый файл пустой
-    private StringBuilder empty(StringBuilder sb) {
-        System.out.println("Введите текст");
-        sb = new StringBuilder();
-        Scanner sc = new Scanner(System.in);
-        String s;
-        for (; ; ) {
-            s = sc.nextLine();
-            if (s.length() == 0) {
+    private StringBuilder empty(StringBuilder sb, Scanner sc) {
+        int a=0;
+        while (sc.hasNext()) {
+            sb.append(sc.nextLine());
+            if(a==sb.length())
                 break;
-            } else
-                sb.append(s + "\n");
+            sb.append("\n");
+            a=sb.length();
         }
+
         return sb;
     }
 
@@ -230,6 +225,13 @@ public class TransporatorClass {
 
         }
         return s;
+    }
+
+    public static void main(String[] args) throws IOException {
+        TransporatorClass tr = new TransporatorClass("wtf.txt");
+        TransporatorClass tr2 = new TransporatorClass();
+        tr.writeTo();
+        tr2.writeTo();
     }
 
 
