@@ -65,7 +65,6 @@ public class Tests {
 
         tr.cut(2);
         tr.left(5);
-        tr.writeTo("wtf.txt");
         System.out.println("cut       " + tr.toString().equals
                 ("AA    AA    A     AA   \n" +
                  "BB    B    \n" +
