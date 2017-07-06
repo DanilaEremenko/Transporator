@@ -15,48 +15,34 @@ public class TransporatorClass {
 
 
     public TransporatorClass(String file) throws IOException {
-        StringBuilder sb = new StringBuilder();
+
         Scanner sc = new Scanner(Paths.get(file));
-        sb = empty(sb, sc);
-        makeArrayWord(sb);
-
-
+        makeArrayWord(sc);
     }
 
     public TransporatorClass() {
+
         System.out.println("Введите текст");
-        StringBuilder sb = new StringBuilder();
         Scanner sc = new Scanner(System.in);
-        sb = empty(sb, sc);
-        makeArrayWord(sb);
-
+        makeArrayWord(sc);
     }
 
 
-    //Если текстовый файл пустой
-    private StringBuilder empty(StringBuilder sb, Scanner sc) {
-        int a = 0;
+    private void makeArrayWord(Scanner sc) {
+
+        ArrayList<String> massString = new ArrayList<>();
+
         while (sc.hasNext()) {
-            sb.append(sc.nextLine());
-            if (a == sb.length())
+            massString.add(sc.nextLine());
+            if (massString.get(massString.size() - 1).length() == 0)
                 break;
-            sb.append("\n");
-            a = sb.length();
         }
-
-        return sb;
-    }
-
-    private void makeArrayWord(StringBuilder sb) {
-        String massString[];
-        massString = sb.toString().split("\n");//Разбиваем на строчки
-
 
         String massWord[];
 
         //Запускаем цикл для каждоый строчки
-        for (int i = 0; i < massString.length; i++) {
-            massWord = massString[i].split("\\s+");
+        for (int i = 0; i < massString.size(); i++) {
+            massWord = massString.get(i).split("\\s+");
             if (massWord.length > maxelements)
                 maxelements = massWord.length;
             for (int j = 0; j < massWord.length; j++) {
@@ -69,6 +55,7 @@ public class TransporatorClass {
 
 
     }
+
 
     //Транспонирует текст
     public void transpose() {
@@ -96,9 +83,9 @@ public class TransporatorClass {
 
     //Обрезает все слова в тексте до заданного размера
     public void cut(int number) {
-        for (int i=0;i<line.size();i++)
+        for (int i = 0; i < line.size(); i++)
             if (line.get(i).length() > number && !line.get(i).equals("\n"))
-                line.set(i,line.get(i).substring(0, number));
+                line.set(i, line.get(i).substring(0, number));
 
 
     }

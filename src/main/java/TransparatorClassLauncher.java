@@ -53,6 +53,8 @@ public class TransparatorClassLauncher {
 
 
         if (isRight) {
+            if (length == -1)
+                length = 10;
             tr.right(length);
         } else
             tr.left(length);
@@ -62,5 +64,6 @@ public class TransparatorClassLauncher {
         else
             tr.writeTo();
     }
+
 
 }
